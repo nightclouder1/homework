@@ -43,6 +43,21 @@ Switch# show startup-config
 startup-config is not present
 ```
 Почему появляется это сообщение? *Так как устройство новое и на нем не было сохранено запускающей конфигурации*
+Назначен ли IP-адрес сети VLAN 1? *Нет, не назначен, так как по умолчанию он не настроен*
+Данный интерфейс включен? *Нет, не включен, так как по умолчанию он не включен*
+```
+Switch# show ip interface vlan 1
+Vlan1 is administratively down, line protocol is down
+  Internet protocol processing disabled
+```
+Какие выходные данные вы видите? *Ошибка, так как интерфейс выключен и ему не присвоен ip-адрес*
 
+```
+Switch(config) interface vlan 1
+Switch(config) ip address 192.168.1.2 255.255.255.0
+Switch(config) no shutdown
+Switch# show ip interface vlan 1
+```
+Какие выходные данные вы видите? *Мы видим, что интерфейс активен, ему назначен адрес, а так же для него включены множества базовых функций, но отключено множество расширенных сервисов*
 
 
