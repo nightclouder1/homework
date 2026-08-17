@@ -71,7 +71,36 @@ Switch# show version
 Switch# show interface fe6/0
 
 ```
-* Интерфейс включен или выключен? *Включен, так как перед этим был задан ip-адрес для интерфейса, а так же введена команда для его включения
+* Интерфейс включен или выключен? *Включен, так как перед этим был задан ip-адрес для интерфейса, а так же введена команда для его включения*
 * Что нужно сделать, чтобы включить интерфейс? *ввести команду: no shutdown*
 
+```
+Switch# show flash 
+Switch# dir flash: 
+```
+* Какое имя присвоено образу Cisco IOS? *2960-lanbasek9-mz.150-2.SE4*
 
+### Настройка базовых параметров сетевых устройств
+
+```
+Switch(config) no ip domain-lookup
+Switch(config) hostname S1
+Switch(config) service password-encryption
+Switch(config) enable secret class
+Switch(config) login
+Switch(config) banner motd # NO ENTER !!! #
+```
+```
+Switch(config) interface vlan 1
+Switch(config) ip address 192.168.1.2 255.255.255.0
+Switch(config) no shutdown
+Switch# show ip interface vlan 1
+```
+```
+S1(config)# line console 0
+S1(config-line)# password cisco
+S1(config-line)# login
+S1(config-line)# logging synchronous
+S1(config-line)# exit
+```
+* Для чего нужна команда login? *Для подтверждения пароля*
