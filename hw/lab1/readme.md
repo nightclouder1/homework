@@ -116,3 +116,15 @@ PC > ping 192.168.1.2
 ```
 * Зачем необходимо настраивать пароль VTY для коммутатора? *Для ограниченного доступа*
 * Что нужно сделать, чтобы пароли не отправлялись в незашифрованном виде? *Перейти на SSH*
+
+### Подключение через Telnet
+```
+S1 (config)# line vty 0 4
+S1 (config-line)# password cisco
+S1 (config-line)# login
+S1 (config-line)# transport input telnet
+S1# write memory
+```
+```
+PC > telnet 192.168.1.2
+```
