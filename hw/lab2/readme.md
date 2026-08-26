@@ -83,10 +83,10 @@ S2# write memory
 ```
 PC1, PC2 > ipconfig /all.
 ```
-MAC-адрес компьютера PC-1: 00E0.8F05.1A13
+MAC-адрес компьютера PC-1: 00E0.8F05.1A13;
 MAC-адрес компьютера PC-2: 0060.5C3C.0DDD
 ```
 S1, S2 > show mac address-table
 ```
-МАС-адрес коммутатора S1 Fast Ethernet 0/1: 0060.5c3c.0ddd
+МАС-адрес коммутатора S1 Fast Ethernet 0/1: 0060.5c3c.0ddd;
 МАС-адрес коммутатора S2 Fast Ethernet 0/1: 0060.5c3c.0ddd
