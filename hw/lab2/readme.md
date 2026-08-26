@@ -30,3 +30,26 @@ Switch# write erase
 Switch# reload
 ```
 #### Шаг 4 настройка базовых параметров каждого коммутатора
+```
+Switch> enable 
+Switch# conf t
+Switch(config) interface vlan 1
+Switch(config) ip address 192.168.1.11 255.255.255.0
+Switch(config) no shutdown
+Switch(config) no ip domain-lookup
+Switch(config) hostname S1
+S1(config) service password-encryption
+S1(config) enable secret class
+S1(config) banner motd # NO ENTER !!! #
+S1(config)# line console 0
+S1(config-line)# password cisco
+S1(config-line)# login
+S1(config-line)# logging synchronous
+S1(config-line)# exit
+S1 (config)# line vty 0 6
+S1 (config-line)# password cisco
+S1 (config-line)# login
+S1 (config-line)# transport input telnet
+S1# write memory
+```
+Удостовериться, что связь с маршрутизатором налажена: PC1 > ping 192.168.1.11 
