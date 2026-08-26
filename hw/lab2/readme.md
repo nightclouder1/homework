@@ -77,3 +77,4 @@ S2(config-line)# transport input telnet
 S2# write memory
 ```
 Удостовериться, что связь с маршрутизатором S2 налажена: PC2 > ping 192.168.1.12
+Удостовериться, что связь PC1 с PC2 налажена: PC1 > ping 192.162.1.2
