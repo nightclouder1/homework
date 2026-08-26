@@ -52,4 +52,28 @@ S1 (config-line)# login
 S1 (config-line)# transport input telnet
 S1# write memory
 ```
-Удостовериться, что связь с маршрутизатором налажена: PC1 > ping 192.168.1.11 
+Удостовериться, что связь с маршрутизатором S1 налажена: PC1 > ping 192.168.1.11 
+
+```
+Switch> enable 
+Switch# conf t
+Switch(config) interface vlan 1
+Switch(config) ip address 192.168.1.12 255.255.255.0
+Switch(config) no shutdown
+Switch(config) no ip domain-lookup
+Switch(config) hostname S2
+S2(config) service password-encryption
+S2(config) enable secret class
+S2(config) banner motd # NO ENTER !!! #
+S2(config)# line console 0
+S2(config-line)# password cisco
+S2(config-line)# login
+S2(config-line)# logging synchronous
+S2(config-line)# exit
+S2(config)# line vty 0 6
+S2(config-line)# password cisco
+S2(config-line)# login
+S2(config-line)# transport input telnet
+S2# write memory
+```
+Удостовериться, что связь с маршрутизатором S2 налажена: PC2 > ping 192.168.1.12
