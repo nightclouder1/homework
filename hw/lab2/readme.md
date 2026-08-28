@@ -52,7 +52,6 @@ S1 (config-line)# login
 S1 (config-line)# transport input telnet
 S1# write memory
 ```
-Удостовериться, что связь с маршрутизатором S1 налажена: PC1 > ping 192.168.1.11 
 
 ```
 Switch> enable 
@@ -76,8 +75,6 @@ S2(config-line)# login
 S2(config-line)# transport input telnet
 S2# write memory
 ```
-Удостовериться, что связь с маршрутизатором S2 налажена: PC2 > ping 192.168.1.12 , а также, что связь PC1 с PC2 налажена: PC1 > ping 192.162.1.2
-
 ### Часть 2. Изучение таблицы МАС-адресов коммутатора
 #### Шаг 1 Запишите МАС-адреса сетевых устройств.
 ```
