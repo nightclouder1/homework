@@ -70,5 +70,5 @@ R1(config)# interface gigabitethernet 0/1
 R1(config-if)# ipv6 address 2001:db8:acad:1::1/64
 R1(config-if)# no shutdown
 R1(config-if)# exit
-R# write
+R1# write
 ```
