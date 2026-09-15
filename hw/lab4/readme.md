@@ -127,7 +127,8 @@ PC-A >
 ```
 PC-A > ping FE80:1 #Маршрутизатор. 
 PC-A > ping 2001:DB8:ACAD:1::B #Коммутатор. 
-PC-A > ping FE80::B #Коммутатор. 
+PC-A > ping FE80::B #Коммутатор.
+```
 ```
 Tracing route to 2001:DB8:ACAD:A::3 over a maximum of 30 hops:    
 
@@ -136,6 +137,8 @@ Tracing route to 2001:DB8:ACAD:A::3 over a maximum of 30 hops:
 
 Trace complete.  
 ```
+
+
 ```
 PC-B > ping 2001:db8:acad:a::3 #PC-B. 
 PC-B > ping 2001:db8:acad:a::1 #R1. 
