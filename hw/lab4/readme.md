@@ -128,12 +128,11 @@ PC-A >
 PC-A > ping FE80:1 #Маршрутизатор
 PC-A > ping 2001:DB8:ACAD:1::B #Коммутатор
 PC-A > ping FE80::B #Коммутатор
-
 ```
-Tracing route to 2001:DB8:ACAD:A::3 over a maximum of 30 hops: 
+Tracing route to 2001:DB8:ACAD:A::3 over a maximum of 30 hops:  
 
-  1   0 ms      0 ms      0 ms      2001:DB8:ACAD:1::1 #R1
-  2   0 ms      0 ms      0 ms      2001:DB8:ACAD:A::3 #PC-B
+  1   0 ms      0 ms      0 ms      2001:DB8:ACAD:1::1 #R1. 
+  2   0 ms      0 ms      0 ms      2001:DB8:ACAD:A::3 #PC-B. 
 
 Trace complete.
 ```
@@ -141,6 +140,6 @@ Trace complete.
 PC-B > ping 2001:db8:acad:a::3 #PC-B
 PC-B > ping 2001:db8:acad:a::1 #R1
 ```
-1.	Почему обоим интерфейсам Ethernet на R1 можно назначить один и тот же локальный адрес канала — FE80::1? Потому что это link-local адрес для двух отдельных сетей, одна для сети PC-A, вторая для PC-B.
+1.	Почему обоим интерфейсам Ethernet на R1 можно назначить один и тот же локальный адрес канала — FE80::1? Потому что это link-local адрес для двух отдельных сетей, одна для сети PC-A, вторая для PC-B.  
 2.	Какой идентификатор подсети в индивидуальном IPv6-адресе 2001:db8:acad::aaaa:1234/64?
-Идентификатор подсети: aaaa
+Идентификатор подсети: aaaa. 
