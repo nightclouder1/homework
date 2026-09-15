@@ -59,6 +59,12 @@ S1(config)# banner motd # NO ENTER !!! #
 S1(config)# exit
 S1# write 
 ```
+```
+S1# configure terminal
+S1(config)# sdm prefer dual-ipv4-and-ipv6 default
+S1(config)# end
+S1# reload
+```
 ### Часть 2 Ручная настройка IPv6-адресов
 #### Шаг 1. Назначьте IPv6-адреса интерфейсам Ethernet на R1
 ```
@@ -71,4 +77,12 @@ R1(config-if)# ipv6 address 2001:db8:acad:1::1/64
 R1(config-if)# no shutdown
 R1(config-if)# exit
 R1# write
+```
+#### Шаг 2. Активируйте IPv6-маршрутизацию на R1
+```
+PC-B > ipconfig
+```
+Назначен ли индивидуальный IPv6-адрес сетевой интерфейсной карте (NIC) на PC-B? Да, у него есть индивидуальный link-local IPv6-адрес, который он сам себе создал из MAC-адреса при помощи технологии SLAAC.
+```
+R1(config)# > IPv6 unicast-routing
 ```
