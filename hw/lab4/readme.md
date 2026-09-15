@@ -70,10 +70,12 @@ S1# reload
 ```
 R1(config)# interface gigabitethernet 0/0
 R1(config-if)# ipv6 address 2001:db8:acad:a::1/64
+R1(config-if)# ipv6 address fe80::1 link-local
 R1(config-if)# no shutdown
 R1(config-if)# exit
 R1(config)# interface gigabitethernet 0/1
 R1(config-if)# ipv6 address 2001:db8:acad:1::1/64
+R1(config-if)# ipv6 address fe80::1 link-local
 R1(config-if)# no shutdown
 R1(config-if)# exit
 R1# write
@@ -86,3 +88,38 @@ PC-B > ipconfig
 ```
 R1(config)# > IPv6 unicast-routing
 ```
+Почему PC-B получил глобальный префикс маршрутизации и идентификатор подсети, которые вы настроили на R1?  Потому что после активации ipv6 unicast-routing маршрутизатор R1 начал рассылать сообщения. PC-B, используя SLAAC сформировал свой IPv6-адрес.
+
+#### Шаг 3. Назначьте IPv6-адреса интерфейсу управления (SVI) на S1.
+
+```
+S1(config)# interface vlan 1
+S1(config-if)# ipv6 address 2001:db8:acad:1::b/64
+S1(config-if)# ipv6 address fe80::b link-local
+S1(config-if)# no shutdown
+S1(config-if)# exit
+S1(config)# exit
+```
+#### Шаг 4. Назначьте компьютерам статические IPv6-адреса.
+
+```
+PC-B >   
+   Connection-specific DNS Suffix..: 
+   Link-local IPv6 Address.........: FE80::202:17FF:FE13:A538
+   IPv6 Address....................: 2001:DB8:ACAD:A::3
+   IPv4 Address....................: 0.0.0.0
+   Subnet Mask.....................: 0.0.0.0
+   Default Gateway.................: FE80::1
+                                     0.0.0.0
+
+PC-A >
+   Connection-specific DNS Suffix..: 
+   Link-local IPv6 Address.........: FE80::260:47FF:FEE8:ACC2
+   IPv6 Address....................: 2001:DB8:ACAD:1::3
+   IPv4 Address....................: 0.0.0.0
+   Subnet Mask.....................: 0.0.0.0
+   Default Gateway.................: FE80::1
+                                     0.0.0.0
+```
+
+### Часть 3. Проверка сквозного подключения
