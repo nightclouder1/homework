@@ -66,4 +66,42 @@ PC > ping 192.168.1.1
 Pinging 192.168.1.1 with 32 bytes of data:
 Reply from 192.168.1.1: bytes=32 time=2ms TTL=255
 ```
+#### Часть 2. Настройка маршрутизатор для доступа по протоколу SSH
+#### Шаг 1. Настройка аутентификации устройств 
+#### Шаг 2. Создайте ключ шифрования с указанием его длины
 
+```
+R1(config)# ip domain-name Router
+R1(config)# crypto key generate rsa
+How many bits in the modulus [512]: 1024
+R1(config)# ip ssh version 2 
+```
+#### Шаг 3. Активируйте протокол SSH на линиях VTY
+```
+R1(config)# username admin privilege 15 secret Cisco
+R1(config)# line vty 0 4
+R1(config)# login local
+R1(config)# transport input ssh
+R1(config)# transport input telnet
+R# write
+```
+#### Часть 3. Настройка коммутатора для доступа по протоколу SSH
+```
+S1(config)# ip domain-name Router
+S1(config)# crypto key generate rsa
+How many bits in the modulus [512]: 1024
+S1(config)# ip ssh version 2 
+S1(config)# username admin privilege 15 secret Cisco
+S1(config)# line vty 0 4
+S1(config)# login local
+S1(config)# transport input ssh
+S1(config)# transport input telnet
+S1(config-if)# ip address 192.168.1.11 255.255.255.0
+S1(config-if)# no shutdown
+S1# write
+```
+#### Часть 4. Настройка протокола SSH с использованием интерфейса командной строки 
+```
+PC > ssh -l admin 192.168.1.1
+```
+Как предоставить доступ к сетевому устройству нескольким пользователям, у каждого из которых есть собственное имя пользователя? Внести в базу данных коммутатора/маршрутизатора всех пользователей с персональными логинами и паролями.
