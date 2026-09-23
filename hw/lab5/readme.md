@@ -59,3 +59,11 @@ R1(config-if)# ip address 192.168.1.1 255.255.255.0
 R1(config)# exit
 R1# write
 ```
+Настройка компьютера произведена относительно таблицы адресации
+
+```
+PC > ping 192.168.1.1
+Pinging 192.168.1.1 with 32 bytes of data:
+Reply from 192.168.1.1: bytes=32 time=2ms TTL=255
+```
+
