@@ -84,3 +84,33 @@ S1# write
 Настройка узлов ПК выполнена согласно топологии:
 ![](lab6_4.png)
 ![](lab6_5.png)
+
+#### Часть 2. Создание сетей VLAN и назначение портов коммутатора
+#### Шаг 1. Создайте сети VLAN на коммутаторах.
+#### a. Создайте и назовите необходимые VLAN на каждом коммутаторе из таблицы выше.
+```
+S1> enable
+S1# configure terminal
+
+S1(config)# vlan 10
+S1(config-vlan)# name Upravlenie
+S1(config-vlan)# exit
+
+S1(config)# vlan 20
+S1(config-vlan)# name Sales
+S1(config-vlan)# exit
+
+S1(config)# vlan 30
+S1(config-vlan)# name Operations
+S1(config-vlan)# exit
+
+S1(config)# vlan 999
+S1(config-vlan)# name Parking_Lot
+S1(config-vlan)# exit
+
+S1(config)# vlan 1000
+S1(config-vlan)# name Sobstvennaya
+S1(config-vlan)# exit
+
+S1# show vlan brief
+```
