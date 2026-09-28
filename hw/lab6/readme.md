@@ -36,3 +36,51 @@
 #### Часть 1. Создание сети и настройка основных параметров устройства
 #### Шаг 1. Создайте сеть согласно топологии
 ![](lab6_2.png)
+
+#### Шаг 2. Настройте базовые параметры для маршрутизатора
+```
+Router> enable
+Router# conf t
+Router(config)# hostname R1
+R1(config)# no ip domain-lookup
+R1(config)# enable secret class
+R1(config)# line console 0
+R1(config-line)# password cisco
+R1(config-line)# login
+R1(config-line)# exit
+R1(config)# line vty 0 4
+R1(config-line)# password cisco
+R1(config-line)# login
+R1(config-line)# exit
+R1(config)# service password-encryption
+R1(config)# banner motd # NO ENTER !!! #
+R1(config)# exit
+R1# clock set 14:30:00 28 Sep 2026
+R1# write
+```
+#### Шаг 3. Настройте базовые параметры каждого коммутатора.
+```
+Switch> enable
+Switch# conf t
+Switch(config)# hostname S1
+S1(config)# no ip domain-lookup
+S1(config)# enable secret class
+S1(config)# line console 0
+S1(config-line)# password cisco
+S1(config-line)# login
+S1(config-line)# exit
+S1(config)# line vty 0 4
+S1(config-line)# password cisco
+S1(config-line)# login
+S1(config-line)# exit
+S1(config)# service password-encryption
+S1(config)# banner motd # NO ENTER !!! #
+S1# clock set 14:30:00 28 Sep 2026
+S1# write 
+```
+Аналогичная настройка для Switch2
+
+#### Шаг 4. Настройте узлы ПК
+Настройка узлов ПК выполнена согласно топологии:
+![](lab6_4.png)
+![](lab6_5.png)
