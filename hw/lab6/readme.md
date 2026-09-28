@@ -91,23 +91,18 @@ S1# write
 ```
 S1> enable
 S1# configure terminal
-
 S1(config)# vlan 10
 S1(config-vlan)# name Upravlenie
 S1(config-vlan)# exit
-
 S1(config)# vlan 20
 S1(config-vlan)# name Sales
 S1(config-vlan)# exit
-
 S1(config)# vlan 30
 S1(config-vlan)# name Operations
 S1(config-vlan)# exit
-
 S1(config)# vlan 999
 S1(config-vlan)# name Parking_Lot
 S1(config-vlan)# exit
-
 S1(config)# vlan 1000
 S1(config-vlan)# name Sobstvennaya
 S1(config-vlan)# exit
@@ -121,6 +116,22 @@ S1# show vlan brief
 999  Parking_Lot                      active    
 1000 Sobstvennaya                     active    
 ```
+Настройка Switch2 произведена идентично Switch1
+
 #### b. Настройте интерфейс управления и шлюз по умолчанию на каждом коммутаторе, используя информацию об IP-адресе в таблице адресации. 
 
+```
+S1(config)# interface vlan 10
+S1(config-if)# ip address 192.168.10.11 255.255.255.0
+S1(config-if)# no shutdown
+S1(config-if)# exit
+S1(config)# ip default-gateway 192.168.10.1    
+```
+```
+S2(config)# interface vlan 10
+S2(config-if)# ip address 192.168.10.12 255.255.255.0
+S2(config-if)# no shutdown
+S2(config-if)# exit
+S2(config)# ip default-gateway 192.168.10.1    
+```
 #### c. Назначьте все неиспользуемые порты коммутатора VLAN Parking_Lot, настройте их для статического режима доступа и административно деактивируйте их.
