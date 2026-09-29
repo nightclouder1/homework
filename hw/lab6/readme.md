@@ -151,4 +151,5 @@ S1(config-if)# switchport mode access
 S1(config-if)# switchport access vlan 20
 S1(config-if)# no shutdown
 S1(config-if)# exit
+S1# copy running-config startup-config
 ```
