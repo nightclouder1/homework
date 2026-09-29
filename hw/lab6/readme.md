@@ -141,7 +141,14 @@ S1(config)# interface range f0/2-4, f0/7-24, g0/1-2
 S1(config-if-range)# switchport mode access
 S1(config-if-range)# switchport access vlan 999
 S1(config-if-range)# shutdown
-S1(config-if-range)# exit```
+S1(config-if-range)# exit
+```
+```
+S2(config)# interface range f0/2-17, f0/19-24, g0/1-2
+S2(config-if-range)# switchport mode access
+S2(config-if-range)# switchport access vlan 999
+S2(config-if-range)# shutdown
+S2(config-if-range)# exit
 ```
 #### Шаг 2. Назначьте сети VLAN соответствующим интерфейсам коммутатора.
 
@@ -152,4 +159,40 @@ S1(config-if)# switchport access vlan 20
 S1(config-if)# no shutdown
 S1(config-if)# exit
 S1# copy running-config startup-config
+S1# show vlan brief
+```
+```
+S2(config)# interface f0/18
+S2(config-if)# switchport mode access
+S2(config-if)# switchport access vlan 30
+S2(config-if)# no shutdown
+S2(config-if)# exit
+S2# copy running-config startup-config
+S2# show vlan brief
+```
+#### Часть 3. Конфигурация магистрального канала стандарта 802.1Q между коммутаторами
+#### Шаг 1. Вручную настройте магистральный интерфейс F0/1 на коммутаторах S1 и S2.
+
+```
+S1(config)# interface f0/1
+S1(config-if)# switchport mode trunk
+S1(config-if)# switchport trunk native vlan 1000
+S1(config-if)# switchport trunk allowed vlan 10,20,30,1000
+S1(config)# no shutdown
+```
+Настройка на Switch2 выполнена идентично.
+```
+show interfaces trunk
+```
+#### Шаг 2. Вручную настройте магистральный интерфейс F0/5 на коммутаторе S1.
+
+```
+S1(config)# interface f0/5
+S1(config-if)# switchport mode trunk
+S1(config-if)# switchport trunk native vlan 1000
+S1(config-if)# switchport trunk allowed vlan 10,20,30,1000
+S1(config)# no shutdown
+```
+```
+show interfaces trunk
 ```
