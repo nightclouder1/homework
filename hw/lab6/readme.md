@@ -135,3 +135,20 @@ S2(config-if)# exit
 S2(config)# ip default-gateway 192.168.10.1    
 ```
 #### c. Назначьте все неиспользуемые порты коммутатора VLAN Parking_Lot, настройте их для статического режима доступа и административно деактивируйте их.
+
+```
+S1(config)# interface range f0/2-4, f0/7-24, g0/1-2
+S1(config-if-range)# switchport mode access
+S1(config-if-range)# switchport access vlan 999
+S1(config-if-range)# shutdown
+S1(config-if-range)# exit```
+```
+#### Шаг 2. Назначьте сети VLAN соответствующим интерфейсам коммутатора.
+
+```
+S1(config)# interface f0/6
+S1(config-if)# switchport mode access
+S1(config-if)# switchport access vlan 20
+S1(config-if)# no shutdown
+S1(config-if)# exit
+```
