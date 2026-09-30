@@ -196,3 +196,55 @@ S1(config)# no shutdown
 ```
 show interfaces trunk
 ```
+Что произойдет, если G0/0/1 на R1 будет отключен? Все наши настройки не будут работать :)
+
+#### Часть 4. Настройка маршрутизации между сетями VLAN
+#### Шаг 1. Настройте маршрутизатор.
+#### a.	При необходимости активируйте интерфейс G0/0/1 на маршрутизаторе
+```
+R1# conf t
+R1(config)# interface g0/0
+R1(config-if)# no shutdown
+```
+#### b.	Настройте подинтерфейсы для каждой VLAN, как указано в таблице IP-адресации
+```
+interface g0/0.10
+ encapsulation dot1Q 10
+ ip address 192.168.10.1 255.255.255.0
+ description Gateway VLAN 10 - Management
+
+interface g0/0.20
+ encapsulation dot1Q 20
+ ip address 192.168.20.1 255.255.255.0
+ description Gateway VLAN 20 - Sales
+
+interface g0/0.30
+ encapsulation dot1Q 30
+ ip address 192.168.30.1 255.255.255.0
+ description Gateway VLAN 30 - Operations
+
+interface g0/0.1000
+ encapsulation dot1Q 1000 native
+ description Native VLAN - no IP
+
+```
+#### Часть 5. Проверьте, работает ли маршрутизация между VLAN
+```
+PC-A > ping 192.168.10.1
+PC-A > ping 192.168.30.3
+PC-A > ping 192.168.10.12
+```
+Все адреса пингуются успешно.
+
+```
+C:\>tracert 192.168.20.3
+
+Tracing route to 192.168.20.3 over a maximum of 30 hops: 
+
+  1   2 ms      0 ms      0 ms      192.168.30.1
+  2   1 ms      0 ms      0 ms      192.168.20.3
+
+Trace complete.
+```
+
+Какие промежуточные IP-адреса отображаются в результатах? В результатах отображается ip-адрес маршрутизатора, который причастен к VLAN 30, а так же отображается IP-адрес конечного устройства.
