@@ -71,7 +71,7 @@ a.	Активируйте интерфейс G0/0/1 на маршрутизат�
 ```
 enable
 conf t
-interfece g0/0/1
+interface g0/0/1
 no sh
 ```
 b.	Настройте подинтерфейсы для каждой VLAN в соответствии с требованиями таблицы IP-адресации. Все субинтерфейсы используют инкапсуляцию 802.1Q и назначаются первый полезный адрес из вычисленного пула IP-адресов. Убедитесь, что подинтерфейсу для native VLAN не назначен IP-адрес. Включите описание для каждого подинтерфейса.
@@ -296,6 +296,11 @@ write
 ```
 enable
 conf t
+interface f0/5
+ description Link to R2
+ switchport mode access
+ switchport access vlan 1
+ no shutdown
 interface f0/18
  description PC-B - Client VLAN
  switchport mode access
@@ -331,20 +336,18 @@ VLAN Name                             Status    Ports
 Почему интерфейс F0/5 указан в VLAN 1? Потому что F0/5 является транковым интерфейсом
 
 ### Шаг 9.	Вручную настройте интерфейс S1 F0/5 в качестве транка 802.1Q.
-
+ 
 ```
 enable
 conf t
-# a. Принудительно создаем trunk
 interface f0/5
  switchport mode trunk
-# b. Устанавливаем native VLAN 1000
  switchport trunk native vlan 1000
-# c. Разрешаем прохождение VLAN 100, 200 и 1000
  switchport trunk allowed vlan 100,200,1000
+ no shutdown
 ```
 
- Какой IP-адрес был бы у ПК, если бы он был подключен к сети с помощью DHCP? Адрес из пула VLAN200
+ Какой IP-адрес был бы у ПК, если бы он был подключен к сети с помощью DHCP? ПК, подключённый к S1 в VLAN 100, получил бы адрес из пула VLAN100_Pool
 
 ### Часть 2.	Настройка и проверка двух серверов DHCPv4 на R1
 ### Шаг 1.	Настройте R1 с пулами DHCPv4 для двух поддерживаемых подсетей. Ниже приведен только пул DHCP для подсети A
@@ -372,6 +375,34 @@ write
 
 ```
 show ip dhcp pool
-show ip dhcp bindings
+show ip dhcp binding
 show ip dhcp server statistics 
 ```
+### Шаг 4.	Попытка получить IP-адрес от DHCP на PC-A
+
+```
+ipconfig /all
+ipconfig
+```
+
+PC-A получил адрес 192.168.1.6, маска 255.255.255.192, шлюз 192.168.1.1, DNS-суффикс CCNA-lab.com.
+
+### Часть 3. Настройка DHCP-ретрансляции на R2
+### Шаг 1.	Настройка R2 в качестве агента DHCP-ретрансляции для локальной сети на G0/0/1
+```
+enable
+conf t
+interface g0/0/1
+ ip helper-address 10.0.0.1
+ exit
+end
+write
+```
+
+### Шаг 2.	Попытка получить IP-адрес от DHCP на PC-B
+```
+ipconfig /all
+ipconfig
+```
+PC-B получил адрес 192.168.1.102, маска 255.255.255.240, шлюз 192.168.1.97, DNS-суффикс CCNA-lab.com.
+
