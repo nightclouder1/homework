@@ -42,3 +42,39 @@
 #### Шаг 2. Создайте сеть согласно топологии
 ![](lab8_2.png)
 
+### Шаг 3. Произведите базовую настройку маршрутизаторов.
+
+```
+Router> enable
+Router# conf t
+Router(config)# hostname R1
+R1(config)# no ip domain-lookup
+R1(config)# enable secret class
+R1(config)# line console 0
+R1(config-line)# password cisco
+R1(config-line)# login
+R1(config-line)# exit
+R1(config)# line vty 0 4
+R1(config-line)# password cisco
+R1(config-line)# login
+R1(config-line)# exit
+R1(config)# service password-encryption
+R1(config)# banner motd # NO ENTER !!! #
+R1(config)# exit
+R1# clock set 12:00:00 25 Oct 2026
+R1# write
+```
+Для маршрутизатора R2 выполнена аналогичная настройка.
+
+### Шаг 4.	Настройка маршрутизации между сетями VLAN на маршрутизаторе R1
+a.	Активируйте интерфейс G0/0/1 на маршрутизаторе.
+```
+enable
+conf t
+interfece g0/0/1
+no sh
+```
+b.	Настройте подинтерфейсы для каждой VLAN в соответствии с требованиями таблицы IP-адресации. Все субинтерфейсы используют инкапсуляцию 802.1Q и назначаются первый полезный адрес из вычисленного пула IP-адресов. Убедитесь, что подинтерфейсу для native VLAN не назначен IP-адрес. Включите описание для каждого подинтерфейса.
+```
+
+```
