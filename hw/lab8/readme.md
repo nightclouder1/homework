@@ -76,5 +76,41 @@ no sh
 ```
 b.	Настройте подинтерфейсы для каждой VLAN в соответствии с требованиями таблицы IP-адресации. Все субинтерфейсы используют инкапсуляцию 802.1Q и назначаются первый полезный адрес из вычисленного пула IP-адресов. Убедитесь, что подинтерфейсу для native VLAN не назначен IP-адрес. Включите описание для каждого подинтерфейса.
 ```
+enable
+conf t
 
+interface g0/0/1.100
+ description Client VLAN 100 - Subnet A
+ encapsulation dot1Q 100
+ ip address 192.168.1.1 255.255.255.192
+ no shutdown
+ exit
+
+interface g0/0/1.200
+ description Management VLAN 200 - Subnet B
+ encapsulation dot1Q 200
+ ip address 192.168.1.65 255.255.255.224
+ no shutdown
+ exit
+
+interface g0/0/1.1000
+ description Native VLAN 1000
+ encapsulation dot1Q 1000 native
+ no shutdown
+ exit
+
+write
+```
+c.	Убедитесь, что вспомогательные интерфейсы работают.
+```
+R1#show ip interface brief
+Interface              IP-Address      OK? Method Status                Protocol 
+GigabitEthernet0/0/1   unassigned      YES unset  up                    up 
+GigabitEthernet0/0/1.100192.168.1.1     YES manual up                    up 
+GigabitEthernet0/0/1.200192.168.1.65    YES manual up                    up 
+GigabitEthernet0/0/1.1000unassigned      YES unset  up                    up 
+
+R1#show ip route connected
+ C   192.168.1.0/26  is directly connected, GigabitEthernet0/0/1.100
+ C   192.168.1.64/27  is directly connected, GigabitEthernet0/0/1.200
 ```
