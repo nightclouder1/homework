@@ -73,6 +73,7 @@ exit
 ipv6 route ::/0 2001:db8:acad:2::2
 exit
 write
+```
 
 Настройка для R2:
 
@@ -107,43 +108,110 @@ Default Gateway . . . . . . . . . : fe80::1%6
 ```
 Откуда взялась часть адреса с идентификатором хоста? Сгенерирована автоматически
 
-### Часть 3. Настройка и проверка сервера DHCPv6 без состояния на R1
+### Часть 3. Настройка и проверка сервера DHCPv6 на R1
 
-Шаг 1. Изучите конфигурацию PC-A
-
-text
-ipconfig /all
-Обратите внимание: основной DNS-суффикс отсутствует, DNS-серверы — адреса «локального сайта anycast» (fec0:0:0:ffff::1%1 и т.д.).
-
-Шаг 2. Настройте R1 для предоставления DHCPv6 без состояния для PC-A
+### Шаг 2. Настройте R1 для предоставления DHCPv6 без состояния для PC-A
 
 a. Создайте пул DHCPv6 на R1:
 
-text
-enable
+```
+en
 conf t
 ipv6 dhcp pool R1-STATELESS
  dns-server 2001:db8:acad::254
  domain-name STATELESS.com
 exit
+```
+
 b. Настройте интерфейс G0/0/1 на R1:
 
-text
+```
 interface g0/0/1
  ipv6 nd other-config-flag
  ipv6 dhcp server R1-STATELESS
 exit
 write
-c. Перезапустите PC-A.
+```
 
-d. Проверьте вывод ipconfig /all на PC-A:
+e. Проверьте вывод ipconfig /all на PC-A:
 
-text
+```
 Connection-specific DNS Suffix . : STATELESS.com
 DNS Servers . . . . . . . . . . . : 2001:db8:acad::254
 DNS Suffix Search List. . . . . . : STATELESS.com
-e. Проверьте подключение с PC-A:
+```
 
-text
+f.	Тестирование подключения с помощью пинга IP-адреса интерфейса G0/1 R2
+```
 ping 2001:db8:acad:3::1
+```
 
+### Часть 4. Настройка сервера DHCPv6 с сохранением состояния на R1
+
+a. Создайте пул DHCPv6 на R1 для сети 2001:db8:acad:3:aaa::/80
+
+```
+en
+conf t
+ipv6 dhcp pool R2-STATEFUL
+ address prefix 2001:db8:acad:3:aaa::/80
+ dns-server 2001:db8:acad::254
+ domain-name STATEFUL.com
+exit
+```
+
+b. Назначьте пул DHCPv6 интерфейсу G0/0/0 на R1
+
+```
+int g0/0/0
+ ipv6 dhcp server R2-STATEFUL
+exit
+write
+```
+
+### Часть 5. Настройка и проверка ретрансляции DHCPv6 на R2
+
+### Шаг 1. Включите PC-B и проверьте адрес SLAAC
+
+```
+ipconfig /all
+```
+
+```
+IPv6 Address. . . . . . . . . . . : 2001:db8:acad:3:a0f3:3d39:f9fb:a020
+Default Gateway . . . . . . . . . : fe80::1%6
+```
+
+### Шаг 2. Настройте R2 в качестве агента DHCP-ретрансляции
+
+```
+en
+conf t
+inte g0/0/1
+ ipv6 nd managed-config-flag
+ ipv6 dhcp relay destination 2001:db8:acad:2::1 g0/0/0
+exit
+write
+```
+
+### Шаг 3. Попытка получить адрес IPv6 из DHCPv6 на PC-B
+
+a. Перезапустите PC-B.
+
+b. Проверьте вывод ipconfig /all на PC-B:
+
+```
+Connection-specific DNS Suffix . : STATEFUL.com
+IPv6 Address. . . . . . . . . . . : 2001:db8:acad:3:aaaa:7104:8b7d:5402
+Lease Obtained. . . . . . . . . . : Sunday, October 29, 2026 3:27:13 PM
+Lease Expires . . . . . . . . . . : Tuesday, October 29, 2026 3:27:13 PM
+Default Gateway . . . . . . . . . : fe80::1%6
+DNS Servers . . . . . . . . . . . : 2001:db8:acad::254
+DNS Suffix Search List. . . . . . : STATEFUL.com
+```
+
+c. Проверьте подключение с PC-B:
+
+```
+ping 2001:db8:acad:1::1
+```
