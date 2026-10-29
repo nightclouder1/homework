@@ -22,3 +22,29 @@
 ### Шаг 1. Создайте сеть
 ![](lab9_2.png)
 
+### Шаг 2. Настройте маршрутизатор R1.
+
+a.	Загрузите следующий конфигурационный скрипт на R1.
+
+```
+enable
+configure terminal
+hostname R1
+no ip domain lookup
+ip dhcp excluded-address 192.168.10.1 192.168.10.9
+ip dhcp excluded-address 192.168.10.201 192.168.10.202
+ip dhcp relay information trust-all
+ip dhcp pool Students
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1
+ domain-name CCNA2.Lab-11.6.1
+interface Loopback0
+ ip address 10.10.1.1 255.255.255.0
+interface GigabitEthernet0/0/1
+ description Link to S1
+ ip address 192.168.10.1 255.255.255.0
+ no shutdown
+line con 0
+ logging synchronous
+ exec-timeout 0 0
+```
