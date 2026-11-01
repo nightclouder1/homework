@@ -48,3 +48,85 @@ line con 0
  logging synchronous
  exec-timeout 0 0
 ```
+b.	Проверьте текущую конфигурацию на R1, используя следующую команду:
+
+```
+R1# show ip interface brief
+```
+### Шаг 3. Настройка и проверка основных параметров коммутатора
+
+Для S1:
+```
+enable
+configure terminal
+hostname S1
+no ip domain-lookup
+interface f0/5
+ description Link to R1
+ exit
+interface f0/6
+ description PC-A
+ exit
+interface f0/1
+ description Trunk to S2
+ exit
+ip default-gateway 192.168.10.1
+vlan 10
+ name MANAGEMENT
+ exit
+interface vlan 10
+ ip address 192.168.10.201 255.255.255.0
+ no shutdown
+ exit
+interface f0/5
+ switchport mode access
+ switchport access vlan 10
+ exit
+interface f0/6
+ switchport mode access
+ switchport access vlan 10
+ exit
+interface f0/1
+ switchport mode trunk
+ switchport trunk native vlan 10
+ switchport trunk allowed vlan 10
+ exit
+exit
+write
+```
+Для S2:
+
+```
+enable
+configure terminal
+hostname S2
+no ip domain-lookup
+interface f0/1
+ description Trunk to S1
+ exit
+interface f0/18
+ description PC-B
+ exit
+ip default-gateway 192.168.10.1
+vlan 10
+ name MANAGEMENT
+ exit
+interface vlan 10
+ ip address 192.168.10.202 255.255.255.0
+ no shutdown
+ exit
+interface f0/1
+ switchport mode trunk
+ switchport trunk native vlan 10
+ switchport trunk allowed vlan 10
+ exit
+interface f0/18
+ switchport mode access
+ switchport access vlan 10
+ exit
+exit
+write
+
+```
+
+### Часть 2. Настройка сетей VLAN на коммутаторах.
