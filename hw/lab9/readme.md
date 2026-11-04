@@ -164,18 +164,18 @@ write
 enable
 configure terminal
 vlan 10
- name Management
+name Management
 exit
 vlan 333
- name Native
+name Native
 exit
 vlan 999
- name ParkingLot
+name ParkingLot
 exit
 interface vlan 10
- description Management SVI
- ip address 192.168.10.202 255.255.255.0
- no shutdown
+description Management SVI
+ip address 192.168.10.202 255.255.255.0
+no shutdown
 exit
 ip default-gateway 192.168.10.1
 end
@@ -183,3 +183,29 @@ write
 ```
 
 ### Часть 3. Настройки безопасности коммутатора.
+a.	Настройте все магистральные порты Fa0/1 на обоих коммутаторах для использования VLAN 333 в качестве native VLAN.
+
+Для S1:
+```
+enable
+configure terminal
+interface FastEthernet0/1
+description Link to S2
+switchport mode trunk
+switchport trunk native vlan 333
+exit
+end
+```
+Для S2:
+```
+enable
+configure terminal
+interface FastEthernet0/1
+description Link to S1
+switchport mode trunk
+switchport trunk native vlan 333
+exit
+end
+```
+c.	Отключить согласование DTP F0/1 на S1 и S2. 
+
