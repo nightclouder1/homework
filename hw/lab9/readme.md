@@ -208,4 +208,107 @@ exit
 end
 ```
 c.	Отключить согласование DTP F0/1 на S1 и S2. 
+Для S1 и S2:
+```
+configure terminal
+interface FastEthernet0/1
+ switchport nonegotiate
+exit
+end
+```
+Шаг 2. Настройка портов доступа
+Для S1:
+```
+configure terminal
+interface FastEthernet0/5
+ description Link to R1
+ switchport mode access
+ switchport access vlan 10
+exit
+interface FastEthernet0/6
+ description Link to PC-A
+ switchport mode access
+ switchport access vlan 10
+exit
+end
+```
+Для S2:
+```
+configure terminal
+interface FastEthernet0/18
+ description Link to PC-B
+ switchport mode access
+ switchport access vlan 10
+exit
+end
+```
+### Шаг 3. Безопасность неиспользуемых портов коммутатора
+### a.	На S1 и S2 переместите неиспользуемые порты из VLAN 1 в VLAN 999 и отключите неиспользуемые порты.
 
+Для S1:
+```
+configure terminal
+interface range FastEthernet0/2-4, FastEthernet0/7-24, GigabitEthernet0/1-2
+ switchport mode access
+ switchport access vlan 999
+ shutdown
+exit
+end
+```
+Для S2:
+```
+configure terminal
+interface range FastEthernet0/2-17, FastEthernet0/19-24, GigabitEthernet0/1-2
+ switchport mode access
+ switchport access vlan 999
+ shutdown
+exit
+end
+```
+### Шаг 4. Документирование и реализация функций безопасности порта.
+```
+show port-security interface f0/6
+```
+```
+Port Security              : Disabled
+Port Status                : Secure-down
+Violation Mode             : Shutdown
+Aging Time                 : 0 mins
+Aging Type                 : Absolute
+SecureStatic Address Aging : Disabled
+Maximum MAC Addresses      : 1
+Total MAC Addresses        : 0
+Configured MAC Addresses   : 0
+Sticky MAC Addresses       : 0
+Last Source Address:Vlan   : 0000.0000.0000:0
+Security Violation Count   : 0
+```
+### b.	На S1 включите защиту порта на F0 / 6 со следующими настройками:
+```
+configure terminal
+interface FastEthernet0/6
+ switchport port-security
+ switchport port-security maximum 3
+ switchport port-security violation restrict
+ switchport port-security aging time 60
+ switchport port-security aging type inactivity
+exit
+end
+```
+```
+show port-security interface f0/6
+```
+```
+Port Security              : Enabled
+Port Status                : Secure-up
+Violation Mode             : Restrict
+Aging Time                 : 60 mins
+Aging Type                 : Absolute
+SecureStatic Address Aging : Disabled
+Maximum MAC Addresses      : 3
+Total MAC Addresses        : 0
+Configured MAC Addresses   : 0
+Sticky MAC Addresses       : 0
+Last Source Address:Vlan   : 0000.0000.0000:0
+Security Violation Count   : 0
+```
