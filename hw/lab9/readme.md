@@ -130,3 +130,56 @@ write
 ```
 
 ### Часть 2. Настройка сетей VLAN на коммутаторах.
+### Шаг 1. Сконфигруриуйте VLAN 10.
+### Шаг 2. Сконфигруриуйте SVI для VLAN 10.
+### Шаг 3. Настройте VLAN 333 с именем Native на S1 и S2.
+### Шаг 4. Настройте VLAN 999 с именем ParkingLot на S1 и S2.
+Для S1:
+
+```
+enable
+configure terminal
+vlan 10
+ name Management
+exit
+vlan 333
+ name Native
+exit
+vlan 999
+ name ParkingLot
+exit
+interface vlan 10
+ description Management SVI
+ ip address 192.168.10.201 255.255.255.0
+ no shutdown
+exit
+ip default-gateway 192.168.10.1
+end
+write 
+
+```
+
+Для S2:
+```
+enable
+configure terminal
+vlan 10
+ name Management
+exit
+vlan 333
+ name Native
+exit
+vlan 999
+ name ParkingLot
+exit
+interface vlan 10
+ description Management SVI
+ ip address 192.168.10.202 255.255.255.0
+ no shutdown
+exit
+ip default-gateway 192.168.10.1
+end
+write 
+```
+
+### Часть 3. Настройки безопасности коммутатора.
