@@ -295,6 +295,7 @@ interface FastEthernet0/6
 exit
 end
 ```
+### c.	Verify port security on S1 F0/6.
 ```
 show port-security interface f0/6
 ```
