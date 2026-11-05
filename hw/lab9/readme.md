@@ -365,5 +365,52 @@ interface FastEthernet0/18
 exit
 end
 ```
+e.	В командной строке на PC-B освободите, а затем обновите IP-адрес.
+```
+ipconfig /release
+ipconfig /renew
+```
+### Шаг 6. Реализация PortFast и BPDU Guard
+a.	Настройте PortFast на всех портах доступа, которые используются на обоих коммутаторах.
+Для S1:
+```
+enable
+configure terminal
+interface FastEthernet0/5
+ spanning-tree portfast
+exit
+interface FastEthernet0/6
+ spanning-tree portfast
+exit
+end
+```
+Для S2:
+```
+enable
+configure terminal
+interface FastEthernet0/18
+ spanning-tree portfast
+exit
+end
+```
 
+b.	Включите защиту BPDU на портах доступа VLAN 10 S1 и S2, подключенных к PC-A и PC-B.
+Для S1:
+```
+configure terminal
+interface FastEthernet0/6
+ spanning-tree bpduguard enable
+exit
+end
+```
+Для S2:
+```
+configure terminal
+interface FastEthernet0/18
+ spanning-tree bpduguard enable
+exit
+end
+```
+
+c.	Убедитесь, что защита BPDU и PortFast включены на соответствующих портах.
 
