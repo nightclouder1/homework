@@ -283,7 +283,7 @@ Sticky MAC Addresses       : 0
 Last Source Address:Vlan   : 0000.0000.0000:0
 Security Violation Count   : 0
 ```
-### b.	На S1 включите защиту порта на F0 / 6 со следующими настройками:
+b.	На S1 включите защиту порта на F0 / 6 со следующими настройками:
 ```
 configure terminal
 interface FastEthernet0/6
@@ -295,7 +295,7 @@ interface FastEthernet0/6
 exit
 end
 ```
-### c.	Verify port security on S1 F0/6.
+c.	Verify port security on S1 F0/6.
 ```
 show port-security interface f0/6
 ```
@@ -313,3 +313,57 @@ Sticky MAC Addresses       : 0
 Last Source Address:Vlan   : 0000.0000.0000:0
 Security Violation Count   : 0
 ```
+d.	Включите безопасность порта для F0 / 18 на S2. Настройте каждый активный порт доступа таким образом, чтобы он автоматически добавлял адреса МАС, изученные на этом порту, в текущую конфигурацию.
+```
+enable
+configure terminal
+interface FastEthernet0/18
+ switchport port-security
+ switchport port-security mac-address sticky
+exit
+end
+```
+
+e.	Настройте следующие параметры безопасности порта на S2 F / 18:
+```
+enable
+configure terminal
+interface FastEthernet0/18
+ switchport port-security maximum 2
+ switchport port-security violation protect
+ switchport port-security aging time 60
+exit
+end
+```
+### Шаг 5. Реализовать безопасность DHCP snooping.
+a.	На S2 включите DHCP snooping и настройте DHCP snooping во VLAN 10.
+```
+enable
+configure terminal
+ip dhcp snooping
+ip dhcp snooping vlan 10
+exit
+end
+```
+
+b.	Настройте магистральные порты на S2 как доверенные порты.
+```
+enable
+configure terminal
+interface FastEthernet0/1
+ ip dhcp snooping trust
+exit
+end
+```
+
+c.	Ограничьте ненадежный порт Fa0/18 на S2 пятью DHCP-пакетами в секунду.
+```
+enable
+configure terminal
+interface FastEthernet0/18
+ ip dhcp snooping limit rate 5
+exit
+end
+```
+
+
