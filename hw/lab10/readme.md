@@ -101,3 +101,40 @@ write memory
 ```
 
 ### Часть 2. Настройка и проверка базовой работы протокола OSPFv2 для одной области
+### Шаг 1. Адресация интерфейсов и базовый OSPFv2
+R1 - интерфейсы + OSPF
+```
+configure terminal
+interface g0/0/1
+ip address 10.53.0.1 255.255.255.0
+no shutdown
+interface loopback 1
+ip address 172.16.1.1 255.255.255.0
+no shutdown
+exit
+router ospf 56
+router-id 1.1.1.1
+network 10.53.0.0 0.0.0.255 area 0
+exit
+end
+write memory
+```
+
+R2 - интерфейсы + OSPF
+```
+configure terminal
+interface g0/0/1
+ip address 10.53.0.2 255.255.255.0
+no shutdown
+interface loopback 1
+ip address 192.168.1.1 255.255.255.0
+no shutdown
+exit
+router ospf 56
+router-id 2.2.2.2
+network 10.53.0.0 0.0.0.255 area 0
+network 192.168.1.0 0.0.0.255 area 0
+exit
+end
+write memory
+```
