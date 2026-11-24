@@ -308,3 +308,58 @@ end
 write memory
 
 ```
+### Часть 6. Настройка ПК
+
+PC-A: IP 10.30.0.10 / 255.255.255.0, шлюз 10.30.0.1
+PC-B: IP 10.40.0.10 / 255.255.255.0, шлюз 10.40.0.1
+
+### Часть 7. Настройка и проверка списков контроля доступа (ACL)
+
+ACL на R1 — для Sales 
+
+```
+configure terminal
+ip access-list extended SALES_IN
+ deny tcp 10.40.0.0 0.0.0.255 10.20.0.0 0.0.0.255 eq 22
+ deny tcp 10.40.0.0 0.0.0.255 10.20.0.0 0.0.0.255 eq 80
+ deny tcp 10.40.0.0 0.0.0.255 10.20.0.0 0.0.0.255 eq 443
+ deny tcp 10.40.0.0 0.0.0.255 host 10.20.0.1 eq 80
+ deny tcp 10.40.0.0 0.0.0.255 host 10.20.0.1 eq 443
+ deny tcp 10.40.0.0 0.0.0.255 host 10.30.0.1 eq 80
+ deny tcp 10.40.0.0 0.0.0.255 host 10.30.0.1 eq 443
+ deny tcp 10.40.0.0 0.0.0.255 host 10.40.0.1 eq 80
+ deny tcp 10.40.0.0 0.0.0.255 host 10.40.0.1 eq 443
+ deny icmp 10.40.0.0 0.0.0.255 10.30.0.0 0.0.0.255 echo
+ deny icmp 10.40.0.0 0.0.0.255 10.20.0.0 0.0.0.255 echo
+ permit ip any any
+exit
+interface g0/0/1.40
+ ip access-group SALES_IN in
+exit
+end
+write memory
+```
+ACL на R1 — для Operations
+```
+configure terminal
+ip access-list extended OPS_IN
+ deny icmp 10.30.0.0 0.0.0.255 10.40.0.0 0.0.0.255 echo
+ permit ip any any
+exit
+interface g0/0/1.30
+ ip access-group OPS_IN in
+exit
+end
+write memory
+
+```
+
+PC-A → Ping → 10.40.0.10  → Сбой
+PC-A → Ping → 10.20.0.1   → Успех
+PC-B → Ping → 10.30.0.10  → Сбой
+PC-B → Ping → 10.20.0.1   → Сбой
+PC-B → Ping → 172.16.1.1  → Успех
+PC-B → HTTPS → 10.20.0.1  → Сбой
+PC-B → HTTPS → 172.16.1.1 → Успех
+PC-B → SSH → 10.20.0.4    → Сбой
+PC-B → SSH → 172.16.1.1   → Успех
