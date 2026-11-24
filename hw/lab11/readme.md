@@ -198,3 +198,32 @@ exit
 end
 write memory
 ```
+### Настройте транки (магистральный каналы)
+S1 — транк F0/1 и F0/5
+```
+configure terminal
+interface f0/1
+ switchport mode trunk
+ switchport trunk native vlan 1000
+ switchport trunk allowed vlan 20,30,40,1000
+exit
+interface f0/5
+ switchport mode trunk
+ switchport trunk native vlan 1000
+ switchport trunk allowed vlan 20,30,40,1000
+exit
+end
+write memory
+```
+
+S2 — транк F0/1
+```
+configure terminal
+interface f0/1
+ switchport mode trunk
+ switchport trunk native vlan 1000
+ switchport trunk allowed vlan 20,30,40,1000
+exit
+end
+write memory
+```
