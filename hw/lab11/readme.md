@@ -113,3 +113,88 @@ end
 write memory
 
 ```
+
+### Часть 2 Настройка сетей VLAN на коммутаторах.
+S1 — VLAN + Management + ParkingLot
+
+```
+configure terminal
+vlan 20
+ name Management
+vlan 30
+ name Operations
+vlan 40
+ name Sales
+vlan 999
+ name ParkingLot
+vlan 1000
+ name Native
+exit
+interface vlan 20
+ ip address 10.20.0.2 255.255.255.0
+ no shutdown
+exit
+ip default-gateway 10.20.0.1
+interface range f0/2-4, f0/7-24, g0/1-2
+ switchport mode access
+ switchport access vlan 999
+ shutdown
+exit
+interface f0/6
+ switchport mode access
+ switchport access vlan 30
+ no shutdown
+exit
+interface f0/5
+ switchport mode trunk
+ no shutdown
+exit
+interface f0/1
+ switchport mode trunk
+ no shutdown
+exit
+end
+write memory
+```
+
+S2 — VLAN + Management + ParkingLot
+```
+configure terminal
+vlan 20
+ name Management
+vlan 30
+ name Operations
+vlan 40
+ name Sales
+vlan 999
+ name ParkingLot
+vlan 1000
+ name Native
+exit
+interface vlan 20
+ ip address 10.20.0.3 255.255.255.0
+ no shutdown
+exit
+ip default-gateway 10.20.0.1
+interface range f0/2-4, f0/6-17, f0/19-24, g0/1-2
+ switchport mode access
+ switchport access vlan 999
+ shutdown
+exit
+interface f0/18
+ switchport mode access
+ switchport access vlan 40
+ no shutdown
+exit
+interface f0/5
+ switchport mode access
+ switchport access vlan 20
+ no shutdown
+exit
+interface f0/1
+ switchport mode trunk
+ no shutdown
+exit
+end
+write memory
+```
