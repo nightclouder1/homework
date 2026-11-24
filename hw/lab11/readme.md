@@ -74,3 +74,42 @@ banner motd # NO ENTER! #
 end
 write memory
 ```
+
+Базовая настройка S1
+```
+en
+conf t
+hostname S1
+no ip domain-lookup
+enable secret class
+line console 0
+password cisco
+login
+line vty 0 4
+password cisco
+login
+service password-encryption
+banner motd # NO ENTER! #
+end
+write memory
+```
+
+Базовая настройка S2
+```
+en
+conf t
+hostname S2
+no ip domain-lookup
+enable secret class
+line console 0
+password cisco
+login
+line vty 0 4
+password cisco
+login
+service password-encryption
+banner motd # NO ENTER! #
+end
+write memory
+
+```
