@@ -114,7 +114,7 @@ write memory
 
 ```
 
-### Часть 2 Настройка сетей VLAN на коммутаторах.
+### Часть 2. Настройка сетей VLAN на коммутаторах.
 S1 — VLAN + Management + ParkingLot
 
 ```
@@ -226,4 +226,85 @@ interface f0/1
 exit
 end
 write memory
+```
+### Часть 4. Настройте маршрутизацию
+
+Маршрутизация на R1 (router-on-a-stick)
+```
+configure terminal
+interface g0/0/1
+ no shutdown
+exit
+interface g0/0/1.20
+ encapsulation dot1Q 20
+ ip address 10.20.0.1 255.255.255.0
+ description Management
+exit
+interface g0/0/1.30
+ encapsulation dot1Q 30
+ ip address 10.30.0.1 255.255.255.0
+ description Operations
+exit
+interface g0/0/1.40
+ encapsulation dot1Q 40
+ ip address 10.40.0.1 255.255.255.0
+ description Sales
+exit
+interface g0/0/1.1000
+ encapsulation dot1Q 1000 native
+ description Native VLAN
+exit
+interface loopback 1
+ ip address 172.16.1.1 255.255.255.0
+ no shutdown
+exit
+end
+write memory
+
+```
+
+R2 — интерфейс + маршрут по умолчанию
+```
+configure terminal
+interface g0/0/1
+ ip address 10.20.0.4 255.255.255.0
+ no shutdown
+exit
+ip route 0.0.0.0 0.0.0.0 10.20.0.1
+end
+write memory
+
+```
+
+### Часть 5. Настройте удаленный доступ
+
+На R1
+```
+configure terminal
+username SSHadmin privilege 15 secret $cisco123!
+ip domain-name ccna-lab.com
+crypto key generate rsa modulus 1024
+line vty 0 4
+ transport input ssh
+ login local
+exit
+ip http secure-server
+ip http authentication local
+end
+write memory
+```
+R2, S1, S2 — аналогично (SSH)
+
+```
+configure terminal
+username SSHadmin privilege 15 secret $cisco123!
+ip domain-name ccna-lab.com
+crypto key generate rsa modulus 1024
+line vty 0 4
+ transport input ssh
+ login local
+exit
+end
+write memory
+
 ```
